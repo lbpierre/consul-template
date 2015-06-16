@@ -364,7 +364,7 @@ func env(s string) (string, error) {
 }
 
 //set env variable
-func senv(e string, u unit64){
+func senv(e string, u uint64){
 	s := strconv.FormatUint(u,10)
 	os.Setenv(e,s)	
 }
