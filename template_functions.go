@@ -364,10 +364,10 @@ func env(s string) (string, error) {
 }
 
 //set env variable
-func senv(e string, u uint64) (error) {
+func senv(e string, u uint64) (string) {
 	s := strconv.FormatUint(u,10)
 	os.Setenv(e,s)	
-	return nil
+	return " "
 }
 
 // explode is used to expand a list of keypairs into a deeply-nested hash.
