@@ -370,6 +370,10 @@ func senv(e string, u uint64) (string) {
 	return ""
 }
 
+func lenFunc(l []string) (int) {
+	return len(l)
+}
+
 // explode is used to expand a list of keypairs into a deeply-nested hash.
 func explode(pairs []*dep.KeyPair) (map[string]interface{}, error) {
 	m := make(map[string]interface{})
