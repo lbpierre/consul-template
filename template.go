@@ -121,5 +121,6 @@ func funcMap(brain *Brain, used, missing map[string]dep.Dependency) template.Fun
 		"toYAML":          toYAML,
 		"split":           split,
 		"senv":	   	   senv,
+		"len":		   lenFunc,
 	}
 }
