@@ -369,6 +369,13 @@ func senv(e string, s string) (string) {
 	return ""
 }
 
+func incenv(e string) (string){
+	result, _ := strconv.ParseInt(os.Getenv(e), 0, 64)
+	result = result + 1
+	senv(e, strconv.FormatInt(result,10))
+	return ""	
+}
+
 func lenFunc(l []string) (int) {
 	return len(l)
 }
