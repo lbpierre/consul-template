@@ -123,5 +123,6 @@ func funcMap(brain *Brain, used, missing map[string]dep.Dependency) template.Fun
 		"senv":	   	   senv,
 		"len":		   lenFunc,
 		"toString":	   toString,
+		"incenv":	   incenv,
 	}
 }
