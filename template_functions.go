@@ -10,6 +10,8 @@ import (
 	"strconv"
 	"strings"
 	"time"
+	"errors"
+	"io/ioutil"
 
 	dep "github.com/hashicorp/consul-template/dependency"
 	yaml "gopkg.in/yaml.v2"
@@ -384,6 +386,107 @@ func toString(e uint64) (string){
         s := strconv.FormatUint(e,10)
         return s
 }
+
+func read_file() ([]Pair ,error ) {
+
+	file_name := os.Getenv("ENV_FILE_PATH")
+	buf, err := ioutil.ReadFile(file_name)
+	var defaul []Pair
+	if err != nil {
+		return defaul, errors.New("IO issue")
+	}else
+	{
+		data :=	string(buf)
+		lines := strings.SplitAfter(data,"\n")
+		var llist []Pair
+		for line, _ := range lines{
+			tmp := strings.SplitAfter(lines[line], " ")
+			
+			if tmp[0] != ""{
+				pair := Pair{ tmp[0], tmp[1] }
+				llist = append(llist,pair)
+			}
+		}
+		return llist,nil
+	}
+	return defaul, errors.New("[]Pair empty")
+}
+
+func getValue(index string ) (string, error){
+	
+	position , _ := strconv.Atoi(index)
+	if data, err := read_file(); err != nil{
+		fmt.Println("Error get value: ",err)
+		return "", err
+	}else {
+		for i , _ := range data{
+			if i == position{
+				tmp := data[i].val.(string)
+				return tmp, nil
+			}
+		}
+		return "", nil		
+	}
+}
+
+func testIn(test string) (bool, error){
+
+	if data, err := read_file(); err != nil{
+		fmt.Println("Error read_file: ", err)
+		return false, err
+	} else {
+		for i , _ := range data {
+			tmp := data[i].val.(string)
+			t := strings.TrimSpace(tmp) //remove \r\n
+			if test == t{
+				return true, nil
+			}
+		}
+		return false,nil
+	}
+
+}
+
+
+func add_to_file(env string, val string) (string, error){
+
+	s := env + " " +val + "\r\n"
+	file_name := os.Getenv("ENV_FILE_PATH")
+	file, err := os.OpenFile(file_name, os.O_APPEND|os.O_WRONLY, 0666)
+	if err != nil{
+		fmt.Println("error OPEN")
+		return "", errors.New("Can't open file")
+	}
+
+	if _, err := file.WriteString(s); err != nil{
+		fmt.Println("error writing down")
+		return "",errors.New("Can't append strings to the file")
+	}else{
+		return "",nil
+	}
+	return "", errors.New("An error occured but was not identified")
+}
+
+func clean_file() (string, error){
+	file_name := os.Getenv("ENV_FILE_PATH")
+	file, err := os.Create(file_name)
+	if err != nil{
+		return "" , errors.New("Can't empty the file")
+	}
+	file.Close()
+	return "", nil
+}
+
+
+func showall ()([]Pair, error){
+	if data, err := read_file(); err != nil{
+		var defaul []Pair
+		return defaul, errors.New("Error while calling <read_file>")
+	} else {
+		return data, nil
+	}
+}
+
 
 // explode is used to expand a list of keypairs into a deeply-nested hash.
 func explode(pairs []*dep.KeyPair) (map[string]interface{}, error) {
