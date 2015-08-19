@@ -128,6 +128,6 @@ func funcMap(brain *Brain, used, missing map[string]dep.Dependency) template.Fun
 		"getValue":        getValue,
 		"testIn":	   testIn,
 		"addToFile":       add_to_file,
-		"clean_file":	   clean,
+		"clean":	   clean_file,
 	}
 }
