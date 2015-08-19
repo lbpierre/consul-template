@@ -387,6 +387,10 @@ func toString(e uint64) (string){
         return s
 }
 
+type Pair struct{
+	name, val interface{}	
+}
+
 func read_file() ([]Pair ,error ) {
 
 	file_name := os.Getenv("ENV_FILE_PATH")
